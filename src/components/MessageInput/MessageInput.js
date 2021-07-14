@@ -34,6 +34,7 @@ const MessageInput = ({
     }, [messageToEdit]);
 
 
+
     const fullMessageObject = {
 
         ...currentUser,
