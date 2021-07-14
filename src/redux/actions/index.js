@@ -21,6 +21,6 @@ export const  editMessage = (message, body) => ({
 })
 
 export const  setLike = message => ({
-    type: 'EDIT_MESSAGE',
+    type: 'SET_LIKE',
     payload: {...message, isLiked: !message.isLiked}
 })
