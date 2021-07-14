@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './inputstyle.css'
 import {connect} from "react-redux";
+import {addMessage, editMessage} from "../../redux/actions";
 
 
 const InputStyle = {
@@ -28,11 +29,7 @@ const MessageInput = ({
                           editMessageHandler,
                           isEditMode
                       }) => {
-    const [message, setMessage] = useState(isEditMode ? messageToEdit.text : null);
-
-    useEffect(() => {
-        messageToEdit ?  setMessage(messageToEdit.text) : setMessage(null)
-    }, [messageToEdit]);
+    const [message, setMessage] = useState("");
 
 
 
@@ -45,13 +42,10 @@ const MessageInput = ({
         "editedAt": ""
     }
 
-    const newMessage = () => {
-        addMessageHandler({
+    const newMessage  = {
             ...fullMessageObject,
             text: message,
             id: createUUID()
-        });
-        setMessage(null);
     }
 
     const editMessage = () => {
@@ -88,4 +82,9 @@ const MessageInput = ({
     )
 }
 
-export default MessageInput;
+const dispatchToProps = state => ({
+    addMessageHandler: addMessage,
+    editMessage: editMessage
+})
+
+export default connect(dispatchToProps)(MessageInput);
