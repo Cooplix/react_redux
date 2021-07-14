@@ -24,3 +24,8 @@ export const  setLike = message => ({
     type: 'SET_LIKE',
     payload: {...message, isLiked: !message.isLiked}
 })
+
+export const toogleEditWindow = message => ({
+    type: "EDIT",
+    payload: message
+})

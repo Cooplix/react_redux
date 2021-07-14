@@ -34,6 +34,12 @@ const messages = (state, action) => {
                         ms.id === action.payload.id ? action.payload : ms)
             }
 
+        case 'EDIT':
+            return {
+                ...state,
+                editMessage: action.payload
+            }
+
         default:
             return state;
     }
