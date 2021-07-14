@@ -8,7 +8,8 @@ const messages = (state, action) => {
 
         case 'DELETE_MESSAGE':
             return {
-
+                ...state,
+                messages: state.messages.filter(ms => ms.id !== action.payload)
             }
 
         case 'ADD_MESSAGE':
@@ -19,12 +20,18 @@ const messages = (state, action) => {
 
         case 'EDIT_MESSAGE':
             return {
-
+                ...state,
+                messages: state.messages.map(
+                    ms =>
+                    ms.id === action.payload.id ? action.payload : ms)
             }
 
         case 'SET_LIKE':
             return {
-
+                ...state,
+                messages: state.messages.map(
+                    ms =>
+                        ms.id === action.payload.id ? action.payload : ms)
             }
 
         default:

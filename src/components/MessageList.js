@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import {connect} from "react-redux";
 import Container from '@material-ui/core/Container';
 import { Typography, Card, Avatar, CardContent, IconButton } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
+import {getMessages} from "../redux/actions";
 
 const CardsStyle = {
     width: "60%",
@@ -31,21 +33,27 @@ const CardFooter = {
     alignItems: "center"
 }
 
-const CardFotterChildStyle = {
+const CardFooterChildStyle = {
     flex: "1"
 }
 
-const MessageList = ({ messages, numberOfMessages, currentUser, likeMessageHandler, editModeHandler, deleteMessageHandler }) => {
+const MessageList = ({
+                         messages,
+                         currentPropsUser,
+                         isEditWindow,
+                         currentUser,
+                         likeMessageHandler,
+                         editModeHandler,
+                         deleteMessageHandler }) => {
 
-    const [isLiked, setIsLiked] = useState(false);
 
     return(
         <Container>
             <div className="MessageList">
                 <h3>This is message list </h3>
                 {
-                    numberOfMessages ? messages.map((item, i) => {
-                        const isCurrentUser = currentUser.userId === item.userId;
+                    messages.map(message => {
+                        const isCurrentUser = currentPropsUser.userId === message.userId;
                         const divForCard = isCurrentUser ? rightForCurrentUser : null;
                         return(
 
@@ -55,55 +63,61 @@ const MessageList = ({ messages, numberOfMessages, currentUser, likeMessageHandl
                                         <div style={userAvatarAndNameStyle}>
                                             {
                                                 !isCurrentUser && (
-                                                    <Avatar src={item.avatar} style={AvatarStyle}/>
+                                                    <Avatar src={message.avatar} style={AvatarStyle}/>
                                                 )
                                             }
                                             <Typography gutterBottom variant="h6" component="h2">
-                                                {item.user}
+                                                {message.user}
                                             </Typography>
                                         </div>
                                         <Typography variant="body1" color="textSecondary" component="p">
-                                            {item.text}
+                                            {message.text}
                                         </Typography>
                                         <div style={CardFooter}>
-                                            <div style={CardFotterChildStyle} >
+                                            <div style={CardFooterChildStyle} >
                                                 {
                                                     !isCurrentUser && (
-                                                        <IconButton onClick={() => {likeMessageHandler(i)}} >
-                                                            <FavoriteIcon color={item.isLiked ? "secondary" : "action"} />
+                                                        <IconButton onClick={() => {likeMessageHandler(message)}} >
+                                                            <FavoriteIcon color={message.isLiked ? "secondary" : "action"} />
                                                         </IconButton>
                                                     )
                                                 }
                                                 {
                                                     isCurrentUser && (
-                                                        <IconButton onClick={() => {deleteMessageHandler(i)}}>
+                                                        <IconButton onClick={() => {deleteMessageHandler(message)}}>
                                                             <DeleteIcon  />
                                                         </IconButton>
                                                     )
                                                 }
                                                 {
                                                     isCurrentUser && (
-                                                        <IconButton  onClick={() => {editModeHandler(i)}}>
+                                                        <IconButton  onClick={() => {editModeHandler(message)}}>
                                                             <CreateIcon/>
                                                         </IconButton>
                                                     )
                                                 }
                                             </div>
-                                            <Typography align="right" variant="body2" color="textSecondary" style={CardFotterChildStyle}>
-                                                {item.createdAt}
+                                            <Typography align="right" variant="body2" color="textSecondary" style={CardFooterChildStyle}>
+                                                {message.createdAt}
                                             </Typography>
                                         </div>
                                     </CardContent>
                                 </Card>
                             </div>
                         )
-                    }) : <div>No messages in this chat</div>
+                    })
                 }
             </div>
+            {isEditWindow}
         </Container>
     )
 }
 
+const mapStateToProps = state => ({
+    currentUserProps: state.currentUser,
+    messages: state.messages,
+    isEditWindow: Boolean(state.editMessage.id)
+})
 
 
-export default MessageList;
+export default connect(mapStateToProps)(MessageList);
