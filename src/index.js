@@ -6,8 +6,10 @@ import { Lines } from 'react-preloaders';
 
 ReactDOM.render(
     <React.StrictMode>
-        <Lines/>
-        <Chat />
+        <Provider store={store}>
+            <Lines/>
+            <Chat />
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );
