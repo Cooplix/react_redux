@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './inputstyle.css'
 import {connect} from "react-redux";
-import {addMessage, editMessage} from "../../redux/actions";
+import {addMessage, editMessage, setLike, deleteMessage, getMessages} from "../../redux/actions";
 
 
 const InputStyle = {
@@ -24,10 +24,9 @@ function createUUID() {
 
 const MessageInput = ({
                           addMessageHandler,
-                          currentUser,
+                          currentUserProps,
                           messageToEdit = null,
                           editMessageHandler,
-                          isEditMode
                       }) => {
     const [message, setMessage] = useState("");
 
@@ -35,7 +34,7 @@ const MessageInput = ({
 
     const fullMessageObject = {
 
-        ...currentUser,
+        ...currentUserProps,
         "id": 0,
         "text": "",
         "createdAt": new Date().toUTCString(),
@@ -74,9 +73,9 @@ const MessageInput = ({
                 variant="contained"
                 className="inputButton"
                 color="primary"
-                onClick={ isEditMode ? editMessage : newMessage }
+                onClick={ () => addMessageHandler(newMessage) }
             >
-                {isEditMode ? "Edit" : "Send"}
+                {"Send"}
             </Button>
         </div>
     )
@@ -87,4 +86,8 @@ const dispatchToProps = state => ({
     editMessage: editMessage
 })
 
-export default connect(dispatchToProps)(MessageInput);
+const stateToProps = state => ({
+    currentUserProps: state.currentUser,
+})
+
+export default connect(dispatchToProps, stateToProps)(MessageInput);

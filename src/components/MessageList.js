@@ -5,7 +5,7 @@ import { Typography, Card, Avatar, CardContent, IconButton } from '@material-ui/
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
-import {getMessages} from "../redux/actions";
+import {addMessage, deleteMessage, editMessage, getMessages, setLike} from "../redux/actions";
 
 const CardsStyle = {
     width: "60%",
@@ -40,12 +40,11 @@ const CardFooterChildStyle = {
 const MessageList = ({
                          messages,
                          currentPropsUser,
-                         isEditWindow,
-                         currentUser,
                          likeMessageHandler,
+                         isEditWindow,
+                         deleteMessageHandler,
                          editModeHandler,
-                         deleteMessageHandler }) => {
-
+                     }) => {
 
     return(
         <Container>
@@ -119,5 +118,11 @@ const mapStateToProps = state => ({
     isEditWindow: Boolean(state.editMessage.id)
 })
 
+const dispatchToProps = {
+    editModeHandler: toogleEditWindow,
+    addMessage: addMessage(),
+    deleteMessageHandler: deleteMessage(),
+    likeMessageHandler: setLike()
+}
 
-export default connect(mapStateToProps)(MessageList);
+export default connect(mapStateToProps, dispatchToProps)(MessageList);
