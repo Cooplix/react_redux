@@ -6,6 +6,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import {addMessage, deleteMessage, setLike, toogleEditWindow} from "../../redux/actions";
+import EditMs from "../Edit/EditMs";
 
 const CardsStyle = {
     width: "60%",
@@ -106,7 +107,7 @@ const MessageList = ({
                     })
                 }
             </div>
-            {isEditWindow}
+            {isEditWindow && <EditMs />}
         </Container>
     )
 }

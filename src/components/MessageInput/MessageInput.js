@@ -81,6 +81,7 @@ const MessageInput = ({
 }
 
 const dispatchToProps =  ({
+
     addMessageHandler: addMessage,
     editMessage: editMessage
 })

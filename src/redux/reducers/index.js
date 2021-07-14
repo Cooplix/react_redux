@@ -21,9 +21,9 @@ const messages = (state, action) => {
         case 'EDIT_MESSAGE':
             return {
                 ...state,
-                messages: state.messages.map(
-                    ms =>
-                    ms.id === action.payload.id ? action.payload : ms)
+                messages: state.messages.map(ms =>
+                    ms.id === action.payload.id ?
+                        action.payload : ms)
             }
 
         case 'SET_LIKE':
