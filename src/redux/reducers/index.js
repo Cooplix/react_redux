@@ -11,7 +11,8 @@ const messages = (state, action) => {
             }
         case 'ADD_MESSAGE':
             return {
-
+                ...state,
+                messages: [...state.messages, action.payload]
             }
         case 'EDIT_MESSAGE':
             return {
