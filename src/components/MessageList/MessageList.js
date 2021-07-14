@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {connect} from "react-redux";
 import Container from '@material-ui/core/Container';
 import { Typography, Card, Avatar, CardContent, IconButton } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
-import {addMessage, deleteMessage, editMessage, getMessages, setLike} from "../redux/actions";
+import {addMessage, deleteMessage, setLike, toogleEditWindow} from "../../redux/actions";
 
 const CardsStyle = {
     width: "60%",
@@ -39,20 +39,19 @@ const CardFooterChildStyle = {
 
 const MessageList = ({
                          messages,
-                         currentPropsUser,
+                         currentUserProps,
                          likeMessageHandler,
                          isEditWindow,
                          deleteMessageHandler,
                          editModeHandler,
                      }) => {
-
     return(
         <Container>
             <div className="MessageList">
                 <h3>This is message list </h3>
                 {
-                    messages.map(message => {
-                        const isCurrentUser = currentPropsUser.userId === message.userId;
+                    messages.map(mes => {
+                        const isCurrentUser = currentUserProps.userId === mes.userId;
                         const divForCard = isCurrentUser ? rightForCurrentUser : null;
                         return(
 
@@ -62,42 +61,42 @@ const MessageList = ({
                                         <div style={userAvatarAndNameStyle}>
                                             {
                                                 !isCurrentUser && (
-                                                    <Avatar src={message.avatar} style={AvatarStyle}/>
+                                                    <Avatar src={mes.avatar} style={AvatarStyle}/>
                                                 )
                                             }
                                             <Typography gutterBottom variant="h6" component="h2">
-                                                {message.user}
+                                                {mes.user}
                                             </Typography>
                                         </div>
                                         <Typography variant="body1" color="textSecondary" component="p">
-                                            {message.text}
+                                            {mes.text}
                                         </Typography>
                                         <div style={CardFooter}>
                                             <div style={CardFooterChildStyle} >
                                                 {
                                                     !isCurrentUser && (
-                                                        <IconButton onClick={() => {likeMessageHandler(message)}} >
-                                                            <FavoriteIcon color={message.isLiked ? "secondary" : "action"} />
+                                                        <IconButton onClick={() => {likeMessageHandler(mes)}} >
+                                                            <FavoriteIcon color={mes.isLiked ? "secondary" : "action"} />
                                                         </IconButton>
                                                     )
                                                 }
                                                 {
                                                     isCurrentUser && (
-                                                        <IconButton onClick={() => {deleteMessageHandler(message)}}>
+                                                        <IconButton onClick={() => {deleteMessageHandler(mes)}}>
                                                             <DeleteIcon  />
                                                         </IconButton>
                                                     )
                                                 }
                                                 {
                                                     isCurrentUser && (
-                                                        <IconButton  onClick={() => {editModeHandler(message)}}>
+                                                        <IconButton  onClick={() => {editModeHandler(mes)}}>
                                                             <CreateIcon/>
                                                         </IconButton>
                                                     )
                                                 }
                                             </div>
                                             <Typography align="right" variant="body2" color="textSecondary" style={CardFooterChildStyle}>
-                                                {message.createdAt}
+                                                {mes.createdAt}
                                             </Typography>
                                         </div>
                                     </CardContent>
@@ -120,9 +119,9 @@ const mapStateToProps = state => ({
 
 const dispatchToProps = {
     editModeHandler: toogleEditWindow,
-    addMessage: addMessage(),
-    deleteMessageHandler: deleteMessage(),
-    likeMessageHandler: setLike()
+    addMessage: addMessage,
+    deleteMessageHandler: deleteMessage,
+    likeMessageHandler: setLike
 }
 
 export default connect(mapStateToProps, dispatchToProps)(MessageList);

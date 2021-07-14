@@ -4,12 +4,12 @@ import './index.css';
 import Chat from './Chat';
 import { Lines } from 'react-preloaders';
 import store from "./store/store";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <Lines/>
+            <Lines />
             <Chat />
         </Provider>
     </React.StrictMode>,

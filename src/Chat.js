@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Messages from '../src/data/message';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import MessageInput from './components/MessageInput/MessageInput';
-import MessageList from './components/MessageList';
+import MessageList from './components/MessageList/MessageList';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import {getMessages} from './redux/actions';
 
 
 const ContainerStyle = {
@@ -34,20 +36,18 @@ class Chat extends Component {
                 avatar: null
             },
             messageToEditIndex: {},
-            isEditMode: false
+            isEditMessage: false
         };
         this.receiveMessage = this.receiveMessage.bind(this);
         this.likeMessage = this.likeMessage.bind(this);
         this.deleteMessage = this.deleteMessage.bind(this);
-        this.editModeHander = this.editModeHander.bind(this);
+        this.editModelHandler = this.editModelHandler.bind(this);
         this.editMessage = this.editMessage.bind(this);
     }
 
     receiveMessage(message) {
-        console.log("Catched message: ", message.text);
         this.state.messages.push(message);
         this.setState({messagesLength: this.state.messages.length})
-        console.log("this.state.messages 2: ", this.state.messages);
     }
 
     likeMessage(id) {
@@ -57,7 +57,7 @@ class Chat extends Component {
         this.setState({messages: newArr});
     }
 
-    editModeHander(id) {
+    editModelHandler(id) {
         this.setState({
             messageToEditIndex: id,
             isEditMode: true
@@ -83,39 +83,44 @@ class Chat extends Component {
         this.setState({messages: tempArr});
     }
 
+    componentDidMount() {
+        const {getMessagesHandler} = this.props;
+        getMessagesHandler();
+        setTimeout(() => {this.setState({isLoading: false})}, 200);
+    }
+
+
     render() {
-        const {
-            messages,
-            messagesLength,
-            currentUser,
-            messageToEditIndex,
-            isEditMode
-        } = this.state;
 
         return(
             <div>
+                <Header />
+
                 <Container style={ContainerStyle}>
-                    <Header messages={messages}/>
-                    <h1>Hi</h1>
-                    <MessageList
-                        numberOfMessages={messagesLength}
-                        messages={messages}
-                        currentUser={currentUser}
-                        likeMessageHandler={this.likeMessage}
-                        deleteMessageHandler={this.deleteMessage}
-                        editModeHandler={this.editModeHander}
-                    />
-                    <MessageInput
-                        addMessageHandler={this.receiveMessage}
-                        currentUser={currentUser}
-                        editMessageHandler={this.editMessage}
-                        isEditMode={isEditMode}
-                        messageToEdit={messages[messageToEditIndex]}
-                    />
+                    <MessageList/>
                 </Container>
+
+                <div style={inputMessageStyle}>
+                    <MessageInput style={inputMessageStyle}/>
+                </div>
+
             </div>
         )
     }
 }
 
-export default Chat;
+const inputMessageStyle = {
+    width: "100%",
+    background: "#ffffff",
+    boxShadow: "0 0 5px rgba(0,0,0,0.3)"
+}
+
+const stateToProps = (state) => ({
+    ...state
+})
+
+const dispatchToProps = {
+    getMessagesHandler: getMessages
+}
+
+export default connect(stateToProps, dispatchToProps)(Chat);
