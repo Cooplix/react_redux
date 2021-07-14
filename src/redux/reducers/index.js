@@ -5,22 +5,31 @@ const messages = (state, action) => {
                 ...state,
                 messages:action.payload
             }
+
         case 'DELETE_MESSAGE':
             return {
 
             }
+
         case 'ADD_MESSAGE':
             return {
                 ...state,
                 messages: [...state.messages, action.payload]
             }
+
         case 'EDIT_MESSAGE':
             return {
 
             }
+
         case 'SET_LIKE':
             return {
 
             }
+
+        default:
+            return state;
     }
 }
+
+export default messages;
